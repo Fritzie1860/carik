@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carik Editorial Studio | Autonomous Humanized Writing Pipeline</title>
+  <meta name="description" content="Autonomous editorial pipeline: translates Indonesian drafts, audits plagiarism, grammar, and AI-isms, and humanizes prose with George Orwell's rules.">
+  
+  <!-- Typography from Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="app-root">
+  <!-- Top Navigation & Header -->
+  <header class="app-header" id="app-header">
+    <div class="header-brand">
+      <div class="brand-logo" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 20h9"></path>
+          <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+        </svg>
+      </div>
+      <div class="brand-titles">
+        <h1 class="brand-name">CARIK <span class="brand-badge">Editorial Studio</span></h1>
+        <p class="brand-tagline">Autonomous Humanized Editorial & Writing Pipeline</p>
+      </div>
+    </div>
+
+    <!-- Active Pipeline Flow Steps Indicator -->
+    <div class="flow-stepper" id="flow-stepper">
+      <span class="step-item active" id="step-1-tag" title="Translate with conorbronsdon style guide">1. Translation</span>
+      <span class="step-arrow">&rarr;</span>
+      <span class="step-item" id="step-2-tag" title="Plagiarism, Cliches, Burstiness">2. Audit</span>
+      <span class="step-arrow">&rarr;</span>
+      <span class="step-item" id="step-3-tag" title="3-Pass: Orwell -> Rhythm -> Specificity">3. 3-Pass Rewrite</span>
+      <span class="step-arrow">&rarr;</span>
+      <span class="step-item" id="step-ready-tag" title="Publication ready">Ready</span>
+    </div>
+
+    <div class="header-controls">
+      <button type="button" class="btn btn-subtle btn-sm" id="btn-open-settings" title="Configure Gemini API Key">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        <span id="engine-mode-label">Engine Settings</span>
+      </button>
+      <button type="button" class="btn btn-subtle btn-sm" id="btn-open-rules" aria-label="Open Orwell Writing Rules">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        Rules & Guidelines
+      </button>
+    </div>
+  </header>
+
+  <!-- Main 3-Pane Workbench -->
+  <main class="workbench-container">
+    <!-- Left Pane: Source Ingestion -->
+    <section class="workbench-pane pane-source" id="pane-source">
+      <div class="pane-header">
+        <div class="pane-title-group">
+          <span class="pane-step-tag">Input</span>
+          <h2 class="pane-title">Indonesian Draft</h2>
+        </div>
+        <div class="sample-picker-group">
+          <select id="sample-select" class="select-dropdown" aria-label="Sample Draft Selector">
+            <option value="">Pilih Contoh Artikel...</option>
+            <option value="tech_ai">Kecerdasan Buatan & AI Slop</option>
+            <option value="business">Strategi Pertumbuhan Produk</option>
+            <option value="editorial">Tantangan Jurnalisme Modern</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="pane-body">
+        <div class="input-container">
+          <textarea
+            id="source-textarea"
+            class="source-textarea"
+            placeholder="Tempel draft artikel Bahasa Indonesia Anda di sini..."
+            spellcheck="false"
+          ></textarea>
+        </div>
+
+        <div class="input-meta-bar">
+          <div class="meta-counters">
+            <span id="char-count">0 chars</span>
+            <span class="meta-divider">•</span>
+            <span id="word-count">0 words</span>
+          </div>
+          <div class="retries-config">
+            <label for="max-retries-select" class="config-label">Max Retries:</label>
+            <select id="max-retries-select" class="select-dropdown select-compact">
+              <option value="3" selected>3 Loops</option>
+              <option value="2">2 Loops</option>
+              <option value="1">1 Loop</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="action-buttons-group">
+          <button type="button" class="btn btn-primary" id="btn-start-process">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span>Execute Editorial Loop</span>
+          </button>
+          <button type="button" class="btn btn-secondary" id="btn-audit-only" title="Audit raw text without translating">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <span>Audit English Only</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Center Pane: Live Draft & Version Switcher -->
+    <section class="workbench-pane pane-draft" id="pane-draft">
+      <div class="pane-header">
+        <div class="draft-tabs-nav" id="draft-version-tabs" role="tablist">
+          <button type="button" class="tab-btn active" data-tab="0" role="tab">
+            Draft
+          </button>
+        </div>
+
+        <div class="draft-view-controls">
+          <div class="segmented-control" role="group" aria-label="View Mode">
+            <button type="button" class="segment-btn active" id="btn-mode-clean" title="Clean prose view">Clean</button>
+            <button type="button" class="segment-btn" id="btn-mode-highlights" title="Highlight detected clichés & issues">Highlights</button>
+          </div>
+          <button type="button" class="btn btn-icon" id="btn-copy-draft" title="Copy text to clipboard" aria-label="Copy text">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          </button>
+          <button type="button" class="btn btn-icon" id="btn-export-md" title="Download Markdown" aria-label="Download Markdown">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="pane-body draft-body">
+        <div class="draft-container" id="draft-container">
+          <div class="draft-empty-state" id="draft-empty-state">
+            <div class="empty-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            </div>
+            <p class="empty-title">Ready for Editorial Processing</p>
+            <p class="empty-desc">Drop your Indonesian text on the left and click <strong>Execute Editorial Loop</strong>.</p>
+          </div>
+          
+          <div class="prose-content hidden" id="prose-content" contenteditable="false"></div>
+        </div>
+
+        <div class="draft-footer-bar">
+          <div class="draft-meta-tags" id="draft-meta-tags">
+            <span class="meta-tag" id="draft-word-count">0 words</span>
+            <span class="meta-tag" id="draft-read-time">0 min read</span>
+            <span class="meta-tag" id="draft-sentence-count">0 sentences</span>
+          </div>
+          <div class="draft-status-indicator" id="draft-status-indicator">
+            <span class="status-pill status-idle">STANDBY</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Pane: Audit HUD & Quality Gauges -->
+    <section class="workbench-pane pane-hud" id="pane-hud">
+      <div class="pane-header">
+        <div class="pane-title-group">
+          <span class="pane-step-tag">Stage 2</span>
+          <h2 class="pane-title">Deterministic Audit</h2>
+        </div>
+        <button type="button" class="btn btn-subtle btn-sm" id="btn-inspect-details" title="View Full Report">
+          Details Breakdown
+        </button>
+      </div>
+
+      <div class="pane-body hud-body">
+        <!-- Status Banner -->
+        <div class="hud-status-banner banner-standby" id="hud-status-banner">
+          <div class="banner-icon" id="banner-icon">⚪</div>
+          <div class="banner-info">
+            <h3 class="banner-title" id="banner-title">Pipeline Standby</h3>
+            <p class="banner-desc" id="banner-desc">Waiting for article submission to run multi-dimensional audits.</p>
+          </div>
+        </div>
+
+        <!-- Metric Cards Grid -->
+        <div class="hud-metrics-grid">
+          <!-- Metric 1: Sentence Burstiness -->
+          <div class="metric-card" id="card-burstiness" data-status="neutral">
+            <div class="metric-header">
+              <span class="metric-name">Sentence Burstiness (σ)</span>
+              <span class="metric-threshold">Target ≥ 8.5</span>
+            </div>
+            <div class="metric-value-row">
+              <span class="metric-big-num" id="val-burstiness">0.0</span>
+              <span class="metric-badge" id="badge-burstiness">N/A</span>
+            </div>
+            <div class="histogram-container" id="burstiness-histogram" title="Sentence length distribution">
+              <!-- Dynamic sparkline bars -->
+            </div>
+          </div>
+
+          <!-- Metric 2: Banned AI Clichés -->
+          <div class="metric-card" id="card-cliches" data-status="neutral">
+            <div class="metric-header">
+              <span class="metric-name">AI Cliché Linter (blader)</span>
+              <span class="metric-threshold">Target = 0</span>
+            </div>
+            <div class="metric-value-row">
+              <span class="metric-big-num" id="val-cliches">0</span>
+              <span class="metric-badge" id="badge-cliches">N/A</span>
+            </div>
+            <div class="cliches-chips-container" id="cliches-chips">
+              <span class="empty-chip">No clichés detected yet</span>
+            </div>
+          </div>
+
+          <!-- Metric 3: Critical Grammar & Spelling -->
+          <div class="metric-card" id="card-grammar" data-status="neutral">
+            <div class="metric-header">
+              <span class="metric-name">Grammar & Syntax Linter</span>
+              <span class="metric-threshold">Target = 0</span>
+            </div>
+            <div class="metric-value-row">
+              <span class="metric-big-num" id="val-grammar">0</span>
+              <span class="metric-badge" id="badge-grammar">N/A</span>
+            </div>
+            <p class="metric-subtext" id="subtext-grammar">Local LanguageTool syntax & agreement checks</p>
+          </div>
+
+          <!-- Metric 4: Plagiarism Ratio -->
+          <div class="metric-card" id="card-plagiarism" data-status="neutral">
+            <div class="metric-header">
+              <span class="metric-name">Plagiarism / Web Overlap</span>
+              <span class="metric-threshold">Target &lt; 8.0%</span>
+            </div>
+            <div class="metric-value-row">
+              <span class="metric-big-num" id="val-plagiarism">0.0%</span>
+              <span class="metric-badge" id="badge-plagiarism">N/A</span>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill" id="fill-plagiarism" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <!-- Metric 5: Em-Dash Density -->
+          <div class="metric-card" id="card-em-dash" data-status="neutral">
+            <div class="metric-header">
+              <span class="metric-name">Em-Dash Density (blader)</span>
+              <span class="metric-threshold">Max 2 total</span>
+            </div>
+            <div class="metric-value-row">
+              <span class="metric-big-num" id="val-em-dash">0</span>
+              <span class="metric-badge" id="badge-em-dash">N/A</span>
+            </div>
+            <p class="metric-subtext" id="subtext-em-dash">Strip artificial em-dash pauses</p>
+          </div>
+        </div>
+
+        <!-- Feedback & Recommendation Box -->
+        <div class="feedback-card" id="feedback-card">
+          <div class="feedback-header">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+            <span>Stage 3 Guidance Notes</span>
+          </div>
+          <div class="feedback-content" id="feedback-content">
+            Submit a draft to generate actionable guidance.
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Bottom Drawer: Real-Time Event & WebSocket Activity Log -->
+  <footer class="activity-drawer" id="activity-drawer">
+    <div class="drawer-header" id="drawer-toggle-btn">
+      <div class="drawer-title">
+        <span class="pulse-indicator"></span>
+        <span>Real-Time Pipeline Activity Log</span>
+      </div>
+      <div class="drawer-controls">
+        <span class="drawer-item-count" id="log-count">0 events</span>
+        <button type="button" class="btn-drawer-icon" aria-label="Toggle drawer">▾</button>
+      </div>
+    </div>
+    <div class="drawer-body" id="drawer-logs-container">
+      <div class="log-entry log-system">
+        <span class="log-time">00:00:00</span>
+        <span class="log-tag">SYSTEM</span>
+        <span class="log-msg">Carik Editorial Studio loaded and ready.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Native Dialog: Settings / Gemini API Key -->
+  <dialog id="settings-dialog" class="editorial-dialog">
+    <div class="dialog-card">
+      <header class="dialog-header">
+        <div>
+          <h2 class="dialog-title">Engine Configuration</h2>
+          <p class="dialog-subtitle">Configure Google Gemini API Key or use Free Offline Engine</p>
+        </div>
+        <button type="button" class="btn-close-dialog" id="btn-close-settings" aria-label="Close modal">✕</button>
+      </header>
+      <div class="dialog-body">
+        <div class="form-group" style="display:flex; flex-direction:column; gap:0.5rem;">
+          <label for="input-gemini-key" style="font-size:0.82rem; font-weight:600;">Gemini API Key (Free Tier):</label>
+          <input
+            type="password"
+            id="input-gemini-key"
+            placeholder="AIzaSy..."
+            style="background:var(--bg-app); color:var(--text-primary); border:1px solid var(--border-medium); padding:8px 12px; border-radius:var(--radius-sm); font-family:var(--font-mono); font-size:0.85rem;"
+          />
+          <p style="font-size:0.75rem; color:var(--text-muted);">
+            Dapatkan API key gratis dari <a href="https://aistudio.google.com/apikey" target="_blank" style="color:var(--text-accent);">Google AI Studio</a>. Jika dikosongkan, sistem akan otomatis menggunakan MyMemory Translator & Local Rule Engine secara gratis.
+          </p>
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:1rem;">
+          <button type="button" class="btn btn-secondary" id="btn-clear-key">Clear Key</button>
+          <button type="button" class="btn btn-primary" id="btn-save-key">Save Settings</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Native Dialog: George Orwell Writing Rules & Guidelines -->
+  <dialog id="rules-dialog" class="editorial-dialog">
+    <div class="dialog-card">
+      <header class="dialog-header">
+        <div>
+          <h2 class="dialog-title">Flowchart Architecture & Writing Standards</h2>
+          <p class="dialog-subtitle">Integrated Skills: conorbronsdon, lguz, and blader</p>
+        </div>
+        <button type="button" class="btn-close-dialog" id="btn-close-rules" aria-label="Close modal">✕</button>
+      </header>
+      <div class="dialog-body">
+        <div class="rules-grid">
+          <div class="rule-box">
+            <span class="rule-num">Stage 1: Translation</span>
+            <p class="rule-text"><strong>conorbronsdon style guide</strong>: Direct active verbs, thought-leadership tone, anti-generalization.</p>
+          </div>
+          <div class="rule-box">
+            <span class="rule-num">Pass 1: Orwell's 6 Rules</span>
+            <p class="rule-text"><strong>lguz</strong>: Cut every unnecessary word, convert passive to active, strip metaphors & cliches.</p>
+          </div>
+          <div class="rule-box">
+            <span class="rule-num">Pass 2: Rhythm Variance</span>
+            <p class="rule-text"><strong>blader</strong>: Cadence variation (burstiness SD &ge; 8.5) and em-dash elimination (&le; 2).</p>
+          </div>
+          <div class="rule-box">
+            <span class="rule-num">Pass 3: Specificity</span>
+            <p class="rule-text"><strong>conorbronsdon</strong>: Concrete mechanisms, deep arguments, strict semantic preservation of facts.</p>
+          </div>
+        </div>
+
+        <div class="banned-section">
+          <h3 class="section-heading">Banned Robotic Vocabulary Blacklist</h3>
+          <p class="section-desc">These words immediately trigger the Stage 2 audit filter:</p>
+          <div class="banned-tokens-cloud" id="banned-tokens-cloud">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Native Dialog: Detailed Inspection Modal -->
+  <dialog id="details-dialog" class="editorial-dialog">
+    <div class="dialog-card">
+      <header class="dialog-header">
+        <div>
+          <h2 class="dialog-title" id="details-dialog-title">Audit Breakdown</h2>
+          <p class="dialog-subtitle" id="details-dialog-subtitle">Iteration metrics and flagged offsets</p>
+        </div>
+        <button type="button" class="btn-close-dialog" id="btn-close-details" aria-label="Close modal">✕</button>
+      </header>
+      <div class="dialog-body" id="details-dialog-body">
+        <p class="text-muted">No audit has been completed yet.</p>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Frontend JS Script -->
+  <script src="/static/app.js"></script>
+</body>
+</html>

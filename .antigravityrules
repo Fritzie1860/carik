@@ -1,0 +1,64 @@
+# Antigravity Project Rules & Skill Instructions (.antigravityrules)
+# Project: Carik (Autonomous Humanized Editorial Pipeline)
+
+# ==============================================================================
+# 1. CLEAN CODE & ARCHITECTURE RULES (markoa, sickn33, PatrickJS)
+# ==============================================================================
+- MAX_FUNCTION_LENGTH: Functions MUST NOT exceed 25-30 lines of code. Break down complex operations into single-purpose helper functions.
+- EARLY_RETURN_PATTERN: Mandatory guard clauses. Never write deeply nested if/else statements. Return early or raise domain exceptions.
+- SOLID_COMPLIANCE:
+  - S: One class/module has one single responsibility (Checkers check, Orchestrators sequence, Formatters display).
+  - O: Open for extension, closed for modification via Interfaces (Protocols).
+  - L: Derived classes/implementations must be substitutable without breaking caller assumptions.
+  - I: Prefer small, client-specific interfaces rather than fat general-purpose ones.
+  - D: Depend on abstractions (`domain/protocols.py`), not concrete infrastructure adapters.
+- NO_SPAGHETTI_COMMENTS: Do not write redundant comments restating the code. Write expressive, self-documenting code with meaningful names.
+- STRICT_TYPING: All models and payloads MUST use Pydantic v2 or strict Python type annotations. Never pass untyped `dict` across boundaries.
+- TEST_DRIVEN: Write modular unit tests for all business logic, linter regexes, and calculations.
+
+# ==============================================================================
+# 2. WRITING & HUMANIZER RULES (blader/humanizer, lguz, conorbronsdon)
+# ==============================================================================
+When translating, auditing, or paraphrasing articles, enforce these non-negotiable rules:
+
+- BANNED_AI_WORDS:
+  Immediately flag or eliminate the following AI vocabulary:
+  ["delve", "tapestry", "testament", "beacon", "pivotal", "multifaceted", "fostering",
+   "unlock", "furthermore", "in conclusion", "moreover", "it is important to note",
+   "seamlessly", "vibrant", "landscape", "harnessing", "paradigm", "game-changer"]
+
+- GEORGE_ORWELL_6_RULES (lguz/humanize-writing-skill):
+  1. Never use a metaphor, simile, or figure of speech you are used to seeing in print.
+  2. Never use a long word where a short one will do ("utilize" -> "use", "methodology" -> "method").
+  3. If it is possible to cut a word out, ALWAYS cut it out.
+  4. Never use the passive voice where you can use the active.
+  5. Never use a foreign phrase, scientific word, or jargon word if you can think of an everyday English equivalent.
+  6. Break any of these rules sooner than say anything outright barbarous.
+
+- BURSTINESS_AND_RHYTHM (blader/humanizer):
+  - Monotonous 15-20 word sentence strings are strictly forbidden.
+  - Combine punchy 3-to-6 word sentences with longer, multi-clause rhythmic sentences.
+  - Sentence length standard deviation MUST be >= 8.5 words.
+  - Strip unnecessary em-dashes (—). Maximum 1 em-dash allowed per 500 words.
+
+- THOUGHT_LEADERSHIP & SPECIFICITY (conorbronsdon/avoid-ai-writing):
+  - Ban vague generalities ("Technology is growing rapidly").
+  - Force concrete mechanisms, specific real-world examples, and sharp perspectives.
+  - Reject shallow thesaurus synonym swapping (which triggers plagiarism and detector flags).
+
+# ==============================================================================
+# 3. UI/UX & DESIGN RULES (pbakaus/impeccable, Nutlope/hallmark, Modern Web)
+# ==============================================================================
+When designing or modifying frontend code:
+
+- ANTI_AI_SLOP_POLICY:
+  - NEVER use generic purple-to-cyan gradients.
+  - NEVER use huge, floaty, ungrounded blur shadows (`box-shadow: 0 20px ...`).
+  - Ground all cards with subtle, crisp 1px borders (`border: 1px solid var(--border-subtle)`).
+  - High editorial typography: Monospace for tabular metric numbers, serif/editorial sans for prose.
+  
+- MODERN_CSS_AND_HTML:
+  - Use native `<dialog>` and Popover API for inspector panels and error drill-downs.
+  - Use CSS `:has()` for parent-state reactions without unnecessary JavaScript listeners.
+  - Use CSS `@container` queries for responsive side-by-side editorial panes.
+  - Follow WCAG AA+ contrast guidelines. Never sacrifice readability for aesthetic minimalism.
